@@ -15,6 +15,15 @@ export function getMessageApi(params) {
   })
 }
 
+export function handleLoginApi(params) {
+  return axios({
+    url: '/login',
+    method: 'post',
+    data: {
+      ...params
+    }
+  })
+}
 // export function getDetail() {
 //   return axios({
 //     url: api.detail,

@@ -31,6 +31,7 @@ service.interceptors.request.use(config => {
 
 // 返回数据拦截中，我们可以对数据做一些小小的处理，比如后端所有接口返回的数据是这种类型:{data: {...}}，那我们就可以把data这一层给过滤掉
 service.interceptors.response.use((response) => {
+  console.log(response)
   return response.data
 }, err)
 
