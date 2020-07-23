@@ -19,6 +19,8 @@
     <van-cell-group>
       <van-button type="default" @click="goRegister">注册</van-button>
       <van-button type="primary" :loading="loginLoading" @click="handleSubmit()">登录</van-button>
+
+      <van-button type="default" @click="clickButton">连接</van-button>
     </van-cell-group>
   </div>
 </template>
@@ -36,6 +38,25 @@ export default {
       },
       loginLoading: false
     };
+  },
+  created() {
+    console.log(this);
+    // 这里的sockets是挂在在this上的，不是挂在this.$socket
+    this.sockets.listener.subscribe('chaTmessage', (data) => {
+      console.log('返回了', data) // 能执行
+    })
+  },
+  sockets: {
+    // chaTmessage(data) {//'chaTmessage'事件返回值
+    //   console.log('接收')
+    //   console.log(data);
+    // },
+    // hello(data) {//'hello'事件返回值
+    //   console.log(data, 11111111);
+    // },
+    // message(data) {
+    //   console.log(data);
+    // }
   },
   components: {
     vanCellGroup: cellGroup,
@@ -60,18 +81,21 @@ export default {
     }
   },
   methods: {
+    clickButton: function() {
+      this.$socket.emit("hello", {roomName:'aaa',message:'你好'});//发送信息到后台hello事件
+    },
     handleSubmit() {
       this.validateForm();
       const keys = Object.keys(this.error);
       for (const item of keys) {
         if (this.error[item]) return;
       }
-      this.loginLoading = true
+      this.loginLoading = true;
       handleLoginApi({
         username: this.formData.username,
         password: this.formData.password
       }).then(res => {
-        this.loginLoading = false
+        this.loginLoading = false;
         if (res.code === 200) {
           Toast.success(res.message);
         } else {
@@ -89,7 +113,7 @@ export default {
       }
     },
     goRegister() {
-      this.$router.go('/register')
+      this.$router.go("/register");
     }
   }
 };
